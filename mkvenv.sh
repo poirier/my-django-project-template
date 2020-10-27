@@ -4,8 +4,9 @@ set -euf -o pipefail
 if [[ -f runtime.txt ]] ; then
   python_exe=$(cat runtime.txt)
 else
-  python_exe=$(cat runtime.txt.default)
-  echo "Using default runtime of $python_exe. You can create runtime.txt to override."
+  cp runtime.txt.default runtime.txt
+  python_exe=$(cat runtime.txt)
+  echo "Did not find runtime.txt file, so creating one with $python_exe. You can edit runtime.txt to change it."
 fi
 
 if $python_exe -V >/dev/null 2>&1 ; then
@@ -28,13 +29,23 @@ venvdir=../${project}.venv
 $python_exe -m venv $venvdir
 
 . $venvdir/bin/activate
-pip install -U pip wheel pip-tools
+pip install -U --quiet pip wheel pip-tools
 
 if [[ ! -f requirements.txt ]] ; then
   if [[ ! -f requirements_project.in ]] ; then touch requirements_project.in; fi
   pip-compile requirements.in
 fi
 
-pip-sync requirements.txt
+pip-sync --quiet requirements.txt
 pre-commit install
 pre-commit run --all-files
+
+# Set up .envrc for direnv users
+venv_activation_command=". $venvdir/bin/activate"
+if [[ ! -e .envrc ]] ; then
+  echo $venv_activation_command >.envrc
+elif grep "$venv_activation_command" .envrc ; then
+  :
+else
+  echo $venv_activation_command >>.envrc
+fi
