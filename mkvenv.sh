@@ -27,19 +27,6 @@ fi
 
 venvdir=../${project}.venv
 $python_exe -m venv $venvdir
-
-. $venvdir/bin/activate
-pip install -U --quiet pip wheel pip-tools
-
-if [[ ! -f requirements.txt ]] ; then
-  if [[ ! -f requirements_project.in ]] ; then touch requirements_project.in; fi
-  pip-compile requirements.in
-fi
-
-pip-sync --quiet requirements.txt
-pre-commit install
-pre-commit run --all-files
-
 # Set up .envrc for direnv users
 venv_activation_command=". $venvdir/bin/activate"
 if [[ ! -e .envrc ]] ; then
@@ -49,3 +36,17 @@ elif grep "$venv_activation_command" .envrc ; then
 else
   echo $venv_activation_command >>.envrc
 fi
+
+$venv_activation_command
+pip install -U --quiet pip wheel pip-tools
+
+if [[ ! -f requirements.txt ]] ; then
+  if [[ ! -f requirements_project.in ]] ; then touch requirements_project.in; fi
+  pip-compile requirements.in
+fi
+
+pip-sync --quiet requirements.txt
+
+pre-commit install
+pre-commit run --all-files
+
