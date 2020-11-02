@@ -12,3 +12,8 @@ exclude = '''
   | /venv/
 )
 '''
+
+[tool.isort]
+skip_glob=docs,migrations,node_modules,venv,.direnv
+# https://black.readthedocs.io/en/stable/compatible_configs.html#isort :
+profile = black
