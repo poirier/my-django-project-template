@@ -12,7 +12,7 @@ fi
 if $python_exe -V >/dev/null 2>&1 ; then
   : okay
 else
-  echo "ERROR: $python_exe is not available. Recommend installing with pythonz or your own favorite method, then running this again."
+  echo "ERROR: $python_exe is not available. Recommend installing with pyenv or your own favorite method, then running this again."
   exit 1
 fi
 
