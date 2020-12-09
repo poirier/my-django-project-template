@@ -4,7 +4,7 @@
 # and so we're telling flake8 to allow longer lines. But 88 is a good length for
 # when Black can achieve it.
 line-length = 88
-target_version = ['py37']
+target_version = ['py38']
 exclude = '''
 
 (
@@ -14,6 +14,6 @@ exclude = '''
 '''
 
 [tool.isort]
-skip_glob=docs,migrations,node_modules,venv,.direnv
+skip_glob = "docs,migrations,node_modules,venv,.direnv"
 # https://black.readthedocs.io/en/stable/compatible_configs.html#isort :
-profile = black
+profile = "black"
