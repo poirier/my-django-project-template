@@ -36,3 +36,11 @@ MIDDLEWARE = [
 ROOT_URLCONF = "urls"  # Why isn't this the default?
 USE_TZ = True
 USE_L10N = True
+
+# FIXME: move this to some kind of local settings template or somethign
+
+import warnings
+warnings.filterwarnings(
+    'error', r"DateTimeField .* received a naive datetime",
+    RuntimeWarning, r'django\.db\.models\.fields',
+)
